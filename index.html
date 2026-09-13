@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWAPS — Should You Swap?</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <header class="header-wrapper">
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="about.html" class="nav-link">About Us</a></li>
+        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+        <li><a href="beta.html" id="" class="nav-link">Beta Version</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button id="configApiBtn" class="nav-btn-dark">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <span id="apiStatusText">AI Key</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="canvas-background" id="canvasContainer"></div>
+
+  <main class="chat-layout-wrapper">
+    <div class="chat-center-container">
+      <div class="chat-intro">
+        <h1 class="brand-hero-title">SWAPS</h1>
+        <h2 class="chat-question">Should you swap?</h2>
+        <p class="chat-desc">Check the carbon used to make it, years until it hits a landfill, and better alternatives before you buy.</p>
+      </div>
+
+      <div class="prompt-box-card">
+        <form id="searchForm" class="prompt-input-row">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Type any car, product, or material..." 
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="analyzeBtn" class="send-btn" title="Check sustainability">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <div class="preset-row">
+          <span class="preset-label">Quick checks:</span>
+          <button type="button" class="preset-pill" data-query="Tupperware Plastic Tiffin">Tupperware Tiffin</button>
+          <button type="button" class="preset-pill" data-query="Tesla Model 3 EV">Tesla Model 3</button>
+          <button type="button" class="preset-pill" data-query="Fast Fashion Cotton T-Shirt">Cotton T-Shirt</button>
+          <button type="button" class="preset-pill" data-query="Flagship Smartphone">Smartphone</button>
+        </div>
+      </div>
+
+      <section id="resultsSection" class="results-section hidden">
+        <div class="results-header">
+          <h2 class="verdict-title">The Verdict</h2>
+          <div id="compareBanner" class="compare-mode-tag hidden">
+            <span>Comparing Two Options</span>
+            <button id="exitCompareBtn" class="btn-clean-link">Reset</button>
+          </div>
+        </div>
+
+        <div id="cardsGrid" class="cards-grid single-layout"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="compareModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3>Compare with another option</h3>
+          <p>Put two products side-by-side to see which creates less waste.</p>
+        </div>
+        <button id="closeModalBtn" class="close-btn">&times;</button>
+      </div>
+      <form id="compareForm" class="modal-body">
+        <input 
+          type="text" 
+          id="compareInput" 
+          placeholder="Type the alternative product or car..." 
+          required
+        />
+        <div class="modal-suggestions">
+          <span class="preset-label">Suggested alternatives:</span>
+          <div id="modalDynamicChips" class="preset-row"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelCompareBtn" class="btn-light">Cancel</button>
+          <button type="submit" class="btn-dark">Compare</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="apiModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h3>Add Groq API Key</h3>
+          <p>Optional: Enter your Groq key for live AI checks.</p>
+        </div>
+        <button id="closeApiModalBtn" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input 
+          type="password" 
+          id="groqApiKeyInput" 
+          placeholder="gsk_..." 
+        />
+        <p class="modal-help">If empty, the app will use realistic local product benchmarks automatically.</p>
+        <div class="modal-actions">
+          <button type="button" id="clearApiBtn" class="btn-clean-link danger">Clear Key</button>
+          <button type="button" id="saveApiBtn" class="btn-dark">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
